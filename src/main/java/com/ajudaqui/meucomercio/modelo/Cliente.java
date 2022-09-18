@@ -1,6 +1,10 @@
 package com.ajudaqui.meucomercio.modelo;
 
 import java.util.List;
+/**
+ * ainda falta por na classe cliente, uma lista dos pedidos realizados
+ * e um resumo do carrinho
+ */
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,17 +23,9 @@ public class Cliente {
 	private String nome;
 	private String email;
 	private String password;
-
 	@OneToMany
 	private List<Endereco> endereco;
-
-//	public Cliente(String nome, String email, String password, Endereco endereco) {
-//		super();
-//		this.nome = nome;
-//		this.email = email;
-//		this.password = password;
-//		this.endereco = endereco;
-//	}
+	
 
 	public Long getId() {
 		return id;
@@ -55,20 +51,19 @@ public class Cliente {
 		this.email = email;
 	}
 
-//	public Endereco getEndereco() {
-//		return endereco;
-//	}
-//
-//	public void setEndereco(Endereco endereco) {
-//		this.endereco = endereco;
-//	}
-
 	public String getPassword() {
 		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public List<Endereco> getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(List<Endereco> endereco) {
+		this.endereco = endereco;
 	}
 
 }

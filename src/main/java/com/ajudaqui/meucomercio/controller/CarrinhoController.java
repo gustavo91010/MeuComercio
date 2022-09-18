@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.ajudaqui.meucomercio.controller.form.AtualizarCarrinhoForm;
 import com.ajudaqui.meucomercio.dto.CarrinhoDto;
 import com.ajudaqui.meucomercio.modelo.Carrinho;
 import com.ajudaqui.meucomercio.repository.CarrinhoRepository;
@@ -31,6 +35,7 @@ public class CarrinhoController {
 	public ResponseEntity<CarrinhoDto> novoCarrinho(@RequestBody CarrinhoDto carrinhoDto,
 			UriComponentsBuilder uriBuilder) {
 		Carrinho carrinho = repository.save(carrinhoDto.convert());
+		
 		URI uri = uriBuilder.path("/carrinho/{id}").buildAndExpand(carrinho.getId()).toUri();
 
 		return ResponseEntity.created(uri).body(new CarrinhoDto(carrinho));
@@ -47,7 +52,7 @@ public class CarrinhoController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CarrinhoDto> getCarrinho(Long id) {
+	public ResponseEntity<CarrinhoDto> getCarrinho(@PathVariable Long id) {
 		Optional<Carrinho> carrinho = repository.findById(id);
 		if (carrinho.isPresent()) {
 			return ResponseEntity.ok(new CarrinhoDto(carrinho.get()));
@@ -57,24 +62,18 @@ public class CarrinhoController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<CarrinhoDto> atualizar(Long id, @RequestBody CarrinhoDto carrinhoDto) {
+	public ResponseEntity<CarrinhoDto> atualizar(@PathVariable Long id, @RequestBody  @Valid AtualizarCarrinhoForm atualizarCarrinhoForm) {
 		Optional<Carrinho> carrinho = repository.findById(id);
 		if (carrinho.isPresent()) {
-			carrinho.get().setCliente(carrinhoDto.getCliente());
-			carrinho.get().setEstoque(carrinhoDto.getEstoque());
-			carrinho.get().setId(carrinhoDto.getId());
-			carrinho.get().setProdutos(carrinhoDto.getProdutos());
-			carrinho.get().setQuantidade(carrinhoDto.getQuantidade());
-			carrinho.get().setValorTotal(carrinhoDto.getValorTotal());
-			carrinho.get().setVendedor(carrinhoDto.getVendedor());
+			Carrinho carrinhoAtualizado= atualizarCarrinhoForm.atualizar(id, repository);
 
-			return ResponseEntity.ok(new CarrinhoDto(carrinho.get()));
+			return ResponseEntity.ok(new CarrinhoDto(carrinhoAtualizado));
 		}
 		return ResponseEntity.notFound().build();
 
 	}
-	@DeleteMapping
-	public ResponseEntity<CarrinhoDto> remover(Long id){
+	@DeleteMapping("/{id}")
+	public ResponseEntity<CarrinhoDto> remover(@PathVariable Long id){
 		Optional<Carrinho> carrinho = repository.findById(id);
 		if(carrinho.isPresent()) {
 			
