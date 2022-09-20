@@ -41,9 +41,11 @@ public class Carrinho {
 	private List<Produto> produtos;
 	
 	@OneToMany
-	 List<Estoque> estoque;;
+//	@JoinColumn(name= "produto_quantidade")
+	private List<Estoque> estoque;
 	private int quantidade;
-
+	
+	
 //	@OneToMany
 //	private Produto produtos;
 	private BigDecimal valorTotal = BigDecimal.ZERO;
@@ -67,6 +69,13 @@ public class Carrinho {
 		this.produtos = produtos;
 		this.quantidade = quantidade;
 		this.valorTotal = produtos.stream().map(p-> p.getValor()).reduce(BigDecimal.ZERO,BigDecimal::add);
+	}
+	
+
+
+	public Carrinho(Cliente cliente) {
+		super();
+		this.cliente = cliente;
 	}
 
 

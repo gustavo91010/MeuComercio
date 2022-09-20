@@ -8,8 +8,9 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Estoque {
-	
-	// tentar fazer com que esta tabela seja simplesmente uma coluna na tabela produto.
+
+	// tentar fazer com que esta tabela seja simplesmente uma coluna na tabela
+	// produto.
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,12 +18,13 @@ public class Estoque {
 
 	@OneToOne
 	private Produto produto;
-	private int quantodade;
+	private Integer quantidade;
 
-	public Estoque(Produto produto, int quantodade) {
+	
+	public Estoque(Produto produto, Integer quantidade) {
 		super();
 		this.produto = produto;
-		this.quantodade = quantodade;
+		this.quantidade = quantidade;
 	}
 
 	public Estoque() {
@@ -33,13 +35,27 @@ public class Estoque {
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Produto getProduto() {
 		return produto;
 	}
 
-	public int getQuantodade() {
-		return quantodade;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
+
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
+	}
+	
+
 	
 
 }

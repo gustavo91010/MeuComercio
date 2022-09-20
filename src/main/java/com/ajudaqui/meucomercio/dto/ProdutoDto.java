@@ -1,24 +1,25 @@
-package com.ajudaqui.meucomercio.modelo;
+package com.ajudaqui.meucomercio.dto;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.ajudaqui.meucomercio.modelo.Categoria;
+import com.ajudaqui.meucomercio.modelo.Produto;
 
-@Table(name = "produtos")
-@Entity
-public class Produto {
+public class ProdutoDto {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	private String descricao;
 	private Categoria categoria;
 	private BigDecimal valor = BigDecimal.ZERO;
+
+	public ProdutoDto(Produto produto) {
+		this.id = produto.getId();
+		this.nome = produto.getNome();
+		this.descricao = produto.getDescricao();
+		this.categoria = produto.getCategoria();
+		this.valor = produto.getValor();
+	}
 
 	public Long getId() {
 		return id;
@@ -60,6 +61,15 @@ public class Produto {
 		this.valor = valor;
 	}
 
-	
+	public Produto converte() {
+		Produto produto = new Produto();
+		produto.setCategoria(this.categoria);
+		produto.setDescricao(this.descricao);
+		produto.setId(this.id);
+		produto.setNome(this.nome);
+		produto.setValor(this.valor);
+
+		return produto;
+	}
 
 }
