@@ -2,6 +2,7 @@ package com.ajudaqui.meucomercio.modelo;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +20,9 @@ public class Produto {
 	private String descricao;
 	private Categoria categoria;
 	private BigDecimal valor = BigDecimal.ZERO;
+	public Produto() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public Long getId() {
 		return id;

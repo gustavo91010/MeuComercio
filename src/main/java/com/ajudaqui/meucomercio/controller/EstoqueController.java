@@ -42,7 +42,11 @@ public class EstoqueController {
 		List<Estoque> estoques = new ArrayList<>();
 		List<EstoqueDto> estoquesDto = new ArrayList<>();
 		estoques = repository.findAll();
-		estoques.stream().map(c -> estoquesDto.add(new EstoqueDto(c)));
+//		estoques.stream().map(c -> estoquesDto.add(new EstoqueDto(c)));
+		estoques.forEach(e->{
+			EstoqueDto est = new EstoqueDto(e);
+			estoquesDto.add(est);
+		});
 		return estoquesDto;
 
 	}
@@ -62,11 +66,11 @@ public class EstoqueController {
 			@RequestBody EstoqueDto estoqueDto) {
 		Optional<Estoque> estoque = repository.findById(id);
 		if (estoque.isPresent()) {
-			Estoque EstoqueAtualizado = new Estoque();
-			EstoqueAtualizado.setProduto(estoque.get().getProduto());
-			EstoqueAtualizado.setQuantidade(estoque.get().getQuantidade());
+			
+			estoque.get().setProduto(estoqueDto.getProduto());
+			estoque.get().setQuantidade(estoqueDto.getQuantidade());
 
-			return ResponseEntity.ok(new EstoqueDto(EstoqueAtualizado));
+			return ResponseEntity.ok(new EstoqueDto(estoque.get()));
 		}
 		return ResponseEntity.notFound().build();
 

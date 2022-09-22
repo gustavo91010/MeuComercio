@@ -20,6 +20,9 @@ public class ProdutoDto {
 		this.categoria = produto.getCategoria();
 		this.valor = produto.getValor();
 	}
+	public ProdutoDto() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public Long getId() {
 		return id;

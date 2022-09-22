@@ -21,6 +21,9 @@ public class ClienteDto {
 		this.endereco = Cliente.getEndereco();
 
 	}
+	public ClienteDto() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public Long getId() {
 		return id;
@@ -55,14 +58,14 @@ public class ClienteDto {
 	}
 
 	public Cliente convert() {
-		Cliente Cliente = new Cliente();
-		Cliente.setEmail(this.email);
-		Cliente.setId(this.id);
-		Cliente.setNome(this.nome);
-		Cliente.setPassword(this.password);
-		Cliente.setEndereco(this.endereco);
+		Cliente cliente = new Cliente();
+		cliente.setEmail(this.email);
+		cliente.setId(this.id);
+		cliente.setNome(this.nome);
+		cliente.setPassword(this.password);
+		cliente.setEndereco(this.endereco);
 
-		return null;
+		return cliente;
 	}
 
 	public List<Endereco> getEndereco() {

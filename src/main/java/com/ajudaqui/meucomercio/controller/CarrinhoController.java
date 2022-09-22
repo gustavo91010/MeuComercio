@@ -42,7 +42,7 @@ public class CarrinhoController {
 	}
 
 	@GetMapping
-	public List<CarrinhoDto> getCarrinho() {
+	public List<CarrinhoDto> mostrarCarrinho() {
 		List<Carrinho> carrinhos = new ArrayList<>();
 		List<CarrinhoDto> carrinhosDto = new ArrayList<>();
 		carrinhos = repository.findAll();
@@ -52,7 +52,7 @@ public class CarrinhoController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CarrinhoDto> getCarrinho(@PathVariable Long id) {
+	public ResponseEntity<CarrinhoDto> mostrarCarrinho(@PathVariable Long id) {
 		Optional<Carrinho> carrinho = repository.findById(id);
 		if (carrinho.isPresent()) {
 			return ResponseEntity.ok(new CarrinhoDto(carrinho.get()));

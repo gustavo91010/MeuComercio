@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +21,10 @@ import com.ajudaqui.meucomercio.dto.ProdutoDto;
 import com.ajudaqui.meucomercio.modelo.Produto;
 import com.ajudaqui.meucomercio.repository.ProdutoRepository;
 
-@RequestMapping("/produto")
 @RestController
+@RequestMapping("/produto")
 public class ProdutoController {
-
+	@Autowired
 	private ProdutoRepository repository;
 
 	@PostMapping
@@ -38,8 +39,13 @@ public class ProdutoController {
 		List<Produto> produtos = new ArrayList<>();
 		List<ProdutoDto> produtosDto = new ArrayList<>();
 		produtos = repository.findAll();
-		produtos.stream().map(c -> produtosDto.add(new ProdutoDto(c)));
+//		produtos.stream().map(c -> produtosDto.add(new ProdutoDto(c)));
+		produtos.forEach(p->{
+			ProdutoDto pDto= new ProdutoDto(p);
+			produtosDto.add(pDto);
+		});
 		return produtosDto;
+		
 
 	}
 
@@ -54,17 +60,18 @@ public class ProdutoController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ProdutoDto> atualizar(@PathVariable Long id, @RequestBody ProdutoDto ProdutoDto) {
+	public ResponseEntity<ProdutoDto> atualizar(@PathVariable Long id, @RequestBody ProdutoDto produtoDto) {
 		Optional<Produto> produto = repository.findById(id);
 		if (produto.isPresent()) {
-			Produto produtoAtualizado = new Produto();
-			produtoAtualizado.setCategoria(produto.get().getCategoria());
-			produtoAtualizado.setDescricao(produto.get().getDescricao());
-			produtoAtualizado.setId(produto.get().getId());
-			produtoAtualizado.setNome(produto.get().getNome());
-			produtoAtualizado.setValor(produto.get().getValor());
+			produto.get().setCategoria(produtoDto.getCategoria());
+			produto.get().setDescricao(produtoDto.getDescricao());
+//			produto.get().setId(produtoDto.getId());
+			produto.get().setNome(produtoDto.getNome());
+			produto.get().setValor(produtoDto.getValor());
+			
+			repository.save(produto.get());
 
-			return ResponseEntity.ok(new ProdutoDto(produtoAtualizado));
+			return ResponseEntity.ok(new ProdutoDto(produto.get()));
 		}
 		return ResponseEntity.notFound().build();
 

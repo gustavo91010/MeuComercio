@@ -16,6 +16,9 @@ public class VendedorDto {
 		this.id= vendedor.getId();
 		
 	}
+	public VendedorDto() {
+		// TODO Auto-generated constructor stub
+	}
 	public Long getId() {
 		return id;
 	}
@@ -47,7 +50,7 @@ public class VendedorDto {
 		vendedor.setNome(this.nome);
 		vendedor.setPassword(this.password);
 
-		return null;
+		return vendedor;
 	}
 	
 	
