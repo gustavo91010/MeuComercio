@@ -10,16 +10,15 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.ajudaqui.meucomercio.modelo.Carrinho;
-import com.ajudaqui.meucomercio.modelo.Cliente;
 import com.ajudaqui.meucomercio.modelo.Estoque;
 import com.ajudaqui.meucomercio.modelo.Produto;
-import com.ajudaqui.meucomercio.modelo.Vendedor;
+import com.ajudaqui.meucomercio.modelo.Usuario;
 
 /**
- * Essa classe vai tratar dos itens que forem sendo escolhido pelo cliente para possivel compra
- * Os itens devem ser conferido no estoque pra ver a disponibilidade,
- * se  o produto escolhigo tiver menos de 5 itens, o cliente deve ser avosado;
- * Ela mostrará o valor total, atua dos itens
+ * Essa classe vai tratar dos itens que forem sendo escolhido pelo cliente para
+ * possivel compra Os itens devem ser conferido no estoque pra ver a
+ * disponibilidade, se o produto escolhigo tiver menos de 5 itens, o cliente
+ * deve ser avosado; Ela mostrará o valor total, atua dos itens
  * 
  * 
  * 
@@ -27,31 +26,33 @@ import com.ajudaqui.meucomercio.modelo.Vendedor;
  *
  */
 public class CarrinhoDto {
-	
+
 	private Long id;
-	private Vendedor vendedor;
-	private Cliente cliente;
+	private Usuario usuario;
 	private List<Produto> produtos;
-	
+
 	private List<Estoque> estoque;
 	private int quantidade;
 
 	private BigDecimal valorTotal = BigDecimal.ZERO;
-	
+
 	public CarrinhoDto() {
 	}
-	
+
+	public CarrinhoDto(Usuario usuario) {
+		super();
+		this.usuario = usuario;
+	}
 
 	public CarrinhoDto(Carrinho carrinho) {
 		super();
-		this.vendedor = carrinho.getVendedor();
-		this.cliente = carrinho.getCliente();
+		this.id= carrinho.getId();
+		this.usuario = carrinho.getUsuario();
 		this.produtos = carrinho.getProdutos();
 		this.quantidade = carrinho.getQuantidade();
-		this.valorTotal = produtos.stream().map(p-> p.getValor()).reduce(BigDecimal.ZERO,BigDecimal::add);
-	}
-	
-
+		this.estoque= carrinho.getEstoque();
+		this.valorTotal = carrinho.getValorTotal();
+				}
 
 	public Long getId() {
 		return id;
@@ -61,20 +62,12 @@ public class CarrinhoDto {
 		this.id = id;
 	}
 
-	public Vendedor getVendedor() {
-		return vendedor;
+	public Usuario getUsuario() {
+		return usuario;
 	}
 
-	public void setVendedor(Vendedor vendedor) {
-		this.vendedor = vendedor;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public List<Produto> getProdutos() {
@@ -109,21 +102,15 @@ public class CarrinhoDto {
 		this.valorTotal = valorTotal;
 	}
 
-
 	public Carrinho convert() {
-		Carrinho carrinho= new Carrinho();
-		carrinho.setCliente(this.cliente);
+		Carrinho carrinho = new Carrinho();
+		carrinho.setUsuario(this.usuario);
 		carrinho.setEstoque(this.estoque);
 		carrinho.setId(this.id);
 		carrinho.setProdutos(this.produtos);
 		carrinho.setQuantidade(this.quantidade);
 		carrinho.setValorTotal(this.valorTotal);
-		carrinho.setVendedor(this.vendedor);
 		return carrinho;
 	}
-	
-
-	
-	
 
 }

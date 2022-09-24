@@ -2,13 +2,14 @@ package com.ajudaqui.meucomercio.modelo;
 
 import java.math.BigDecimal;
 /**
- * Essa classe tem a responsabiliidade de agrupar todos os produtos que foram escolhidos por um cliente
+ * Essa classe tem a responsabiliidade de agrupar todos os produtos que foram escolhidos por um usuario
  * tendo ele a intenção de efetuar o pedido ou nao.
- * Todos os produtos estarão dentro do carrinho que estara acoplado a um cliente e possivelmente a 
+ * Todos os produtos estarão dentro do carrinho que estara acoplado a um usuario e possivelmente a 
  * um vendedor.
  */
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,10 +18,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
- * Essa classe vai tratar dos itens que forem sendo escolhido pelo cliente para possivel compra
- * Os itens devem ser conferido no estoque pra ver a disponibilidade,
- * se  o produto escolhigo tiver menos de 5 itens, o cliente deve ser avosado;
- * Ela mostrará o valor total, atua dos itens
+ * Essa classe vai tratar dos itens que forem sendo escolhido pelo usuario para
+ * possivel compra Os itens devem ser conferido no estoque pra ver a
+ * disponibilidade, se o produto escolhigo tiver menos de 5 itens, o usuario
+ * deve ser avosado; Ela mostrará o valor total, atua dos itens
  * 
  * 
  * @author gusta
@@ -28,56 +29,37 @@ import javax.persistence.OneToOne;
  */
 @Entity
 public class Carrinho {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@OneToOne
-	private Vendedor vendedor;
-	@OneToOne
-	private Cliente cliente;
 	
+	@OneToOne(cascade = CascadeType.PERSIST)// para fazer quando o usuario for saldo na classe carrinho, e o mesmo ainda nao esteja no bandco de dados, esse seja salvo la tambem
+	private Usuario usuario;
 	@OneToMany
 	private List<Produto> produtos;
-	
 	@OneToMany
 //	@JoinColumn(name= "produto_quantidade")
 	private List<Estoque> estoque;
 	private int quantidade;
-	
-	
-//	@OneToMany
-//	private Produto produtos;
 	private BigDecimal valorTotal = BigDecimal.ZERO;
-	
+
 	public Carrinho() {
 		// TODO Auto-generated constructor stub
 	}
-	
 
-	public Carrinho(Vendedor vendedor, Cliente cliente, List<Produto> produtos, int quantidade) {
+	public Carrinho(Usuario usuario, List<Produto> produtos, int quantidade) {
 		super();
-		this.vendedor = vendedor;
-		this.cliente = cliente;
+		this.usuario = usuario;
 		this.produtos = produtos;
 		this.quantidade = quantidade;
-		this.valorTotal = produtos.stream().map(p-> p.getValor()).reduce(BigDecimal.ZERO,BigDecimal::add);
+		this.valorTotal = produtos.stream().map(p -> p.getValor()).reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
-	public Carrinho( Cliente cliente, List<Produto> produtos, int quantidade) {
+
+	public Carrinho(Usuario usuario) {
 		super();
-		this.cliente = cliente;
-		this.produtos = produtos;
-		this.quantidade = quantidade;
-		this.valorTotal = produtos.stream().map(p-> p.getValor()).reduce(BigDecimal.ZERO,BigDecimal::add);
+		this.usuario = usuario;
 	}
-	
-
-
-	public Carrinho(Cliente cliente) {
-		super();
-		this.cliente = cliente;
-	}
-
 
 	public Long getId() {
 		return id;
@@ -87,20 +69,12 @@ public class Carrinho {
 		this.id = id;
 	}
 
-	public Vendedor getVendedor() {
-		return vendedor;
+	public Usuario getUsuario() {
+		return usuario;
 	}
 
-	public void setVendedor(Vendedor vendedor) {
-		this.vendedor = vendedor;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public List<Produto> getProdutos() {
@@ -134,9 +108,5 @@ public class Carrinho {
 	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
 	}
-	
-
-	
-	
 
 }

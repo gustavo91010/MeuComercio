@@ -6,4 +6,6 @@ import com.ajudaqui.meucomercio.modelo.Produto;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Long>{
 
+	Produto findByNome(String produtoNome);
+
 }

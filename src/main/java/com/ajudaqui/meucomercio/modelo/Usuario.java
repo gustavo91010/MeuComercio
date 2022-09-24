@@ -5,6 +5,7 @@ import java.util.List;
  * ainda falta por na classe cliente, uma lista dos pedidos realizados
  * e um resumo do carrinho
  */
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,8 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "clientes")
-public class Cliente {
+@Table(name = "usuarios")
+public class Usuario {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +27,18 @@ public class Cliente {
 	@OneToMany
 	private List<Endereco> endereco;
 	
+	public Usuario() {
+		// TODO Auto-generated constructor stub
+	}
+
+	
+
+	public Usuario(String nome) {
+		super();
+		this.nome = nome;
+	}
+
+
 
 	public Long getId() {
 		return id;
@@ -65,5 +78,25 @@ public class Cliente {
 	public void setEndereco(List<Endereco> endereco) {
 		this.endereco = endereco;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email, endereco, id, nome, password);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		return Objects.equals(email, other.email) && Objects.equals(endereco, other.endereco)
+				&& Objects.equals(id, other.id) && Objects.equals(nome, other.nome)
+				&& Objects.equals(password, other.password);
+	}
+	
 
 }

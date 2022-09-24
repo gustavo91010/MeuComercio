@@ -39,7 +39,7 @@ public class AtualizarCarrinhoForm {
 		carrinho.setEstoque(this.estoque);
 		carrinho.setProdutos(this.produto);
 		carrinho.setQuantidade(this.quantodade);
-
+		repository.save(carrinho);
 		return carrinho;
 	}
 

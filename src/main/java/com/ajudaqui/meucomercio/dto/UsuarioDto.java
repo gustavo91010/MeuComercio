@@ -2,10 +2,10 @@ package com.ajudaqui.meucomercio.dto;
 
 import java.util.List;
 
-import com.ajudaqui.meucomercio.modelo.Cliente;
+import com.ajudaqui.meucomercio.modelo.Usuario;
 import com.ajudaqui.meucomercio.modelo.Endereco;
 
-public class ClienteDto {
+public class UsuarioDto {
 
 	private Long id;
 	private String nome;
@@ -13,18 +13,23 @@ public class ClienteDto {
 	private String email;
 	private List<Endereco> endereco;
 
-	public ClienteDto(Cliente Cliente) {
-		this.email = Cliente.getEmail();
-		this.password = Cliente.getPassword();
-		this.nome = Cliente.getNome();
-		this.id = Cliente.getId();
-		this.endereco = Cliente.getEndereco();
+	public UsuarioDto(Usuario usuario) {
+		this.email = usuario.getEmail();
+		this.password = usuario.getPassword();
+		this.nome = usuario.getNome();
+		this.id = usuario.getId();
+		this.endereco = usuario.getEndereco();
 
 	}
-	public ClienteDto() {
+	public UsuarioDto() {
 		// TODO Auto-generated constructor stub
 	}
+	
 
+	public UsuarioDto(String nome, String email) {
+		this.nome = nome;
+		this.email = email;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -57,15 +62,15 @@ public class ClienteDto {
 		this.email = email;
 	}
 
-	public Cliente convert() {
-		Cliente cliente = new Cliente();
-		cliente.setEmail(this.email);
-		cliente.setId(this.id);
-		cliente.setNome(this.nome);
-		cliente.setPassword(this.password);
-		cliente.setEndereco(this.endereco);
+	public Usuario convert() {
+		Usuario usuario = new Usuario();
+		usuario.setEmail(this.email);
+		usuario.setId(this.id);
+		usuario.setNome(this.nome);
+		usuario.setPassword(this.password);
+		usuario.setEndereco(this.endereco);
 
-		return cliente;
+		return usuario;
 	}
 
 	public List<Endereco> getEndereco() {
