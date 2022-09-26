@@ -17,6 +17,7 @@ public class Estoque {
 	private Long id;
 
 	@OneToOne
+//	@OneToOne(cascade = CascadeType.PERSIST)
 	private Produto produto;
 	private Integer quantidade;
 
@@ -53,6 +54,11 @@ public class Estoque {
 
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
+	}
+
+	@Override
+	public String toString() {
+		return "Estoque [produto=" + produto + "]";
 	}
 	
 

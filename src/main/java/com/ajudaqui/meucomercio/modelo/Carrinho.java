@@ -38,7 +38,7 @@ public class Carrinho {
 	private Usuario usuario;
 	@OneToMany
 	private List<Produto> produtos;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.PERSIST)
 //	@JoinColumn(name= "produto_quantidade")
 	private List<Estoque> estoque;
 	private int quantidade;

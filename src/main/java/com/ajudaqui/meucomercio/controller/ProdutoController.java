@@ -58,6 +58,13 @@ public class ProdutoController {
 		return ResponseEntity.notFound().build();
 
 	}
+	
+	@GetMapping(value="/nome/{nome}")
+	public Produto buscarProdutoPorNome(@PathVariable String nome) {
+		Produto protuot = repository.findByNome(nome);
+		return protuot;
+		
+	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<ProdutoDto> atualizar(@PathVariable Long id, @RequestBody ProdutoDto produtoDto) {

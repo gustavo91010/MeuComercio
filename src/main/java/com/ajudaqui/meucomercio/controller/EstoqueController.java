@@ -26,12 +26,12 @@ import com.ajudaqui.meucomercio.repository.EstoqueRepository;
 public class EstoqueController {
 
 	@Autowired
-	private EstoqueRepository repository;
+	private EstoqueRepository estoqueRepository;
 
 	@PostMapping
 	public ResponseEntity<EstoqueDto> cadastrar(@RequestBody EstoqueDto estoqueDto,
 			UriComponentsBuilder uriComponents) {
-		Estoque estoque = repository.save(estoqueDto.converte());
+		Estoque estoque = estoqueRepository.save(estoqueDto.converte());
 		URI uri = uriComponents.path("/estoque/{id}").buildAndExpand(estoque.getId()).toUri();
 
 		return ResponseEntity.created(uri).body(new EstoqueDto(estoque));
@@ -41,7 +41,7 @@ public class EstoqueController {
 	public List<EstoqueDto> mostrarEstoque() {
 		List<Estoque> estoques = new ArrayList<>();
 		List<EstoqueDto> estoquesDto = new ArrayList<>();
-		estoques = repository.findAll();
+		estoques = estoqueRepository.findAll();
 //		estoques.stream().map(c -> estoquesDto.add(new EstoqueDto(c)));
 		estoques.forEach(e->{
 			EstoqueDto est = new EstoqueDto(e);
@@ -53,18 +53,24 @@ public class EstoqueController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<EstoqueDto> getEstoque(@PathVariable Long id) {
-		Optional<Estoque> estoque = repository.findById(id);
+		Optional<Estoque> estoque = estoqueRepository.findById(id);
 		if (estoque.isPresent()) {
 			return ResponseEntity.ok(new EstoqueDto(estoque.get()));
 		}
 		return ResponseEntity.notFound().build();
 
 	}
+	@GetMapping(value= "/nomeProduto/{nomeProduto}")
+	public String recuperarProdutoPeloNome(@PathVariable String nomeProduto) {
+		String pq = estoqueRepository.findByProduto_Nome(nomeProduto);
+		
+		return pq;
+	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<EstoqueDto> atualizar(@PathVariable Long id,
 			@RequestBody EstoqueDto estoqueDto) {
-		Optional<Estoque> estoque = repository.findById(id);
+		Optional<Estoque> estoque = estoqueRepository.findById(id);
 		if (estoque.isPresent()) {
 			
 			estoque.get().setProduto(estoqueDto.getProduto());
@@ -78,10 +84,10 @@ public class EstoqueController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<EstoqueDto> remover(@PathVariable Long id) {
-		Optional<Estoque> estoque = repository.findById(id);
+		Optional<Estoque> estoque = estoqueRepository.findById(id);
 		if (estoque.isPresent()) {
 
-			repository.delete(estoque.get());
+			estoqueRepository.delete(estoque.get());
 
 			return ResponseEntity.ok().build();
 		}

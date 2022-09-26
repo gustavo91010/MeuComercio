@@ -24,7 +24,9 @@ import com.ajudaqui.meucomercio.controller.form.CarrinhoAtualizarProdutos;
 import com.ajudaqui.meucomercio.controller.form.CarrinhoCadastroForm;
 import com.ajudaqui.meucomercio.dto.CarrinhoDto;
 import com.ajudaqui.meucomercio.modelo.Carrinho;
+import com.ajudaqui.meucomercio.modelo.Estoque;
 import com.ajudaqui.meucomercio.repository.CarrinhoRepository;
+import com.ajudaqui.meucomercio.repository.EstoqueRepository;
 import com.ajudaqui.meucomercio.repository.ProdutoRepository;
 import com.ajudaqui.meucomercio.repository.UsuarioRepository;
 
@@ -33,17 +35,19 @@ import com.ajudaqui.meucomercio.repository.UsuarioRepository;
 public class CarrinhoController {
 
 	@Autowired
-	private CarrinhoRepository repository;
+	private CarrinhoRepository carrinhoRepository;
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	@Autowired
+	private EstoqueRepository estoqueRepository;
 
 	@PostMapping
 	public ResponseEntity<CarrinhoDto> novoCarrinho(@RequestBody CarrinhoCadastroForm carrinhoCadastroForm,
 			UriComponentsBuilder uriBuilder) {
-		Carrinho carrinho = carrinhoCadastroForm.cadastrar(repository, usuarioRepository);
-				
+		Carrinho carrinho = carrinhoCadastroForm.cadastrar(carrinhoRepository, usuarioRepository);
+
 		URI uri = uriBuilder.path("/carrinho/{id}").buildAndExpand(carrinho.getId()).toUri();
 
 		return ResponseEntity.created(uri).body(new CarrinhoDto(carrinho));
@@ -53,18 +57,18 @@ public class CarrinhoController {
 	public List<CarrinhoDto> mostrarCarrinho() {
 		List<Carrinho> carrinhos = new ArrayList<>();
 		List<CarrinhoDto> carrinhosDto = new ArrayList<>();
-		carrinhos = repository.findAll();
-		carrinhos.forEach(c->{
-			CarrinhoDto cdto= new CarrinhoDto(c);
+		carrinhos = carrinhoRepository.findAll();
+		carrinhos.forEach(c -> {
+			CarrinhoDto cdto = new CarrinhoDto(c);
 			carrinhosDto.add(cdto);
 		});
 		return carrinhosDto;
 
 	}
 
-	@GetMapping(value="/{id}")
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<CarrinhoDto> mostrarCarrinho(@PathVariable Long id) {
-		Optional<Carrinho> carrinho = repository.findById(id);
+		Optional<Carrinho> carrinho = carrinhoRepository.findById(id);
 		if (carrinho.isPresent()) {
 			return ResponseEntity.ok(new CarrinhoDto(carrinho.get()));
 		}
@@ -72,35 +76,39 @@ public class CarrinhoController {
 
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<CarrinhoDto> atualizar(@PathVariable Long id, @RequestBody  @Valid AtualizarCarrinhoForm atualizarCarrinhoForm) {
-		Optional<Carrinho> carrinho = repository.findById(id);
+//	@PutMapping(value = "/{id}")
+//	public ResponseEntity<CarrinhoDto> atualizar(@PathVariable("id") Long id,
+//			@RequestBody @Valid AtualizarCarrinhoForm atualizarCarrinhoForm) {
+//		Optional<Carrinho> carrinho = carrinhoRepository.findById(id);
+//		if (carrinho.isPresent()) {
+//			Carrinho carrinhoAtualizado = atualizarCarrinhoForm.atualizar(id, carrinhoRepository);
+//
+//			return ResponseEntity.ok(new CarrinhoDto(carrinhoAtualizado));
+//		}
+//		return ResponseEntity.notFound().build();
+//
+//	}
+
+	@PutMapping(value = "/produtos/{id}")
+	public Carrinho atualizarProdutoCarrinho(@PathVariable("id") Long id,
+			@RequestBody CarrinhoAtualizarProdutos carrinhoAtualizarProdutos) {
+		Carrinho carrinho= carrinhoRepository.findById(id).orElseThrow();
+		carrinho.setEstoque(carrinhoAtualizarProdutos.listaAtualizada(produtoRepository, estoqueRepository));
+		carrinhoRepository.save(carrinho);
+		return carrinho;
+	}
+
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<CarrinhoDto> remover(@PathVariable("id") Long id) {
+		Optional<Carrinho> carrinho = carrinhoRepository.findById(id);
 		if (carrinho.isPresent()) {
-			Carrinho carrinhoAtualizado= atualizarCarrinhoForm.atualizar(id, repository);
 
-			return ResponseEntity.ok(new CarrinhoDto(carrinhoAtualizado));
+			carrinhoRepository.delete(carrinho.get());
+
+			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.notFound().build();
 
-	}
-	@DeleteMapping("/{id}")
-	public ResponseEntity<CarrinhoDto> remover(@PathVariable Long id){
-		Optional<Carrinho> carrinho = repository.findById(id);
-		if(carrinho.isPresent()) {
-			
-		repository.delete(carrinho.get());
-		
-		return ResponseEntity.ok().build();
-		}
-		return ResponseEntity.notFound().build();
-		
-	}
-	
-	@PostMapping("/produtos")
-	public void atualizarProdutoCarrinho(@PathVariable Long id,@PathVariable String... produto) {
-		CarrinhoAtualizarProdutos.
-		atualizarProdutoCarrinho(id,produtoRepository,repository,produto);
-		
 	}
 
 }
