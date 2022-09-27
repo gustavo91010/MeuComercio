@@ -61,10 +61,10 @@ public class EstoqueController {
 
 	}
 	@GetMapping(value= "/nomeProduto/{nomeProduto}")
-	public String recuperarProdutoPeloNome(@PathVariable String nomeProduto) {
-		String pq = estoqueRepository.findByProduto_Nome(nomeProduto);
+	public List<Estoque> recuperarProdutoPeloNome(@PathVariable String nomeProduto) {
+		List<Estoque> nomeProdutoEstoque = estoqueRepository.findByProduto_Nome(nomeProduto);
 		
-		return pq;
+		return nomeProdutoEstoque;
 	}
 
 	@PutMapping("/{id}")

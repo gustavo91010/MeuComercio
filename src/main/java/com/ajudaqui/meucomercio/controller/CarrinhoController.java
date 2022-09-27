@@ -21,7 +21,6 @@ import com.ajudaqui.meucomercio.controller.form.CarrinhoAtualizarProdutos;
 import com.ajudaqui.meucomercio.controller.form.CarrinhoCadastroForm;
 import com.ajudaqui.meucomercio.dto.CarrinhoDto;
 import com.ajudaqui.meucomercio.modelo.Carrinho;
-import com.ajudaqui.meucomercio.modelo.Produto;
 import com.ajudaqui.meucomercio.repository.CarrinhoRepository;
 import com.ajudaqui.meucomercio.repository.EstoqueRepository;
 import com.ajudaqui.meucomercio.repository.ProdutoRepository;
@@ -73,21 +72,9 @@ public class CarrinhoController {
 
 	}
 
-//	@PutMapping(value = "/{id}")
-//	public ResponseEntity<CarrinhoDto> atualizar(@PathVariable("id") Long id,
-//			@RequestBody @Valid AtualizarCarrinhoForm atualizarCarrinhoForm) {
-//		Optional<Carrinho> carrinho = carrinhoRepository.findById(id);
-//		if (carrinho.isPresent()) {
-//			Carrinho carrinhoAtualizado = atualizarCarrinhoForm.atualizar(id, carrinhoRepository);
-//
-//			return ResponseEntity.ok(new CarrinhoDto(carrinhoAtualizado));
-//		}
-//		return ResponseEntity.notFound().build();
-//
-//	}
 
 	@PutMapping(value = "/produto/{id}")
-	public CarrinhoDto atualizarProdutoCarrinho(@PathVariable("id") Long id,
+	public ResponseEntity<CarrinhoDto> atualizarProdutoCarrinho(@PathVariable("id") Long id,
 			@RequestBody CarrinhoAtualizarProdutos carrinhoAtualizarProdutos) {
 
 		Optional<Carrinho> carrinho = carrinhoRepository.findById(id);
@@ -96,10 +83,9 @@ public class CarrinhoController {
 			carrinho.get().setEstoque(carrinhoAtualizarProdutos.listaAtualizada(produtoRepository, estoqueRepository));
 			carrinhoRepository.save(carrinho.get());
 
-			return new CarrinhoDto(carrinho.get());
-		} else {
-			return null;
+			return ResponseEntity.ok(new CarrinhoDto(carrinho.get()));
 		}
+		return ResponseEntity.notFound().build();
 	}
 
 	@DeleteMapping(value = "/{id}")
