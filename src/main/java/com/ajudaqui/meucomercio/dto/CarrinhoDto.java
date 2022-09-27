@@ -11,7 +11,6 @@ import java.util.List;
 
 import com.ajudaqui.meucomercio.modelo.Carrinho;
 import com.ajudaqui.meucomercio.modelo.Estoque;
-import com.ajudaqui.meucomercio.modelo.Produto;
 import com.ajudaqui.meucomercio.modelo.Usuario;
 
 /**
@@ -29,10 +28,10 @@ public class CarrinhoDto {
 
 	private Long id;
 	private Usuario usuario;
-	private List<Produto> produtos;
+//	private List<Produto> produtos;
 
 	private List<Estoque> estoque;
-	private int quantidade;
+//	private int quantidade;
 
 	private BigDecimal valorTotal = BigDecimal.ZERO;
 
@@ -48,8 +47,8 @@ public class CarrinhoDto {
 		super();
 		this.id= carrinho.getId();
 		this.usuario = carrinho.getUsuario();
-		this.produtos = carrinho.getProdutos();
-		this.quantidade = carrinho.getQuantidade();
+//		this.produtos = carrinho.getProdutos();
+//		this.quantidade = carrinho.getQuantidade();
 		this.estoque= carrinho.getEstoque();
 		this.valorTotal = carrinho.getValorTotal();
 				}
@@ -70,13 +69,20 @@ public class CarrinhoDto {
 		this.usuario = usuario;
 	}
 
-	public List<Produto> getProdutos() {
-		return produtos;
-	}
-
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
-	}
+//	public List<Produto> getProdutos() {
+//		return produtos;
+//	}
+//
+//	public void setProdutos(List<Produto> produtos) {
+//		this.produtos = produtos;
+//	}
+//	public int getQuantidade() {
+//		return quantidade;
+//	}
+//
+//	public void setQuantidade(int quantidade) {
+//		this.quantidade = quantidade;
+//	}
 
 	public List<Estoque> getEstoque() {
 		return estoque;
@@ -86,13 +92,7 @@ public class CarrinhoDto {
 		this.estoque = estoque;
 	}
 
-	public int getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(int quantidade) {
-		this.quantidade = quantidade;
-	}
+	
 
 	public BigDecimal getValorTotal() {
 		return valorTotal;
@@ -107,8 +107,8 @@ public class CarrinhoDto {
 		carrinho.setUsuario(this.usuario);
 		carrinho.setEstoque(this.estoque);
 		carrinho.setId(this.id);
-		carrinho.setProdutos(this.produtos);
-		carrinho.setQuantidade(this.quantidade);
+//		carrinho.setProdutos(this.produtos);
+//		carrinho.setQuantidade(this.quantidade);
 		carrinho.setValorTotal(this.valorTotal);
 		return carrinho;
 	}

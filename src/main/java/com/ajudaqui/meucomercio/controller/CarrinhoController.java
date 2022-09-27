@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,12 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.ajudaqui.meucomercio.controller.form.AtualizarCarrinhoForm;
 import com.ajudaqui.meucomercio.controller.form.CarrinhoAtualizarProdutos;
 import com.ajudaqui.meucomercio.controller.form.CarrinhoCadastroForm;
 import com.ajudaqui.meucomercio.dto.CarrinhoDto;
 import com.ajudaqui.meucomercio.modelo.Carrinho;
-import com.ajudaqui.meucomercio.modelo.Estoque;
+import com.ajudaqui.meucomercio.modelo.Produto;
 import com.ajudaqui.meucomercio.repository.CarrinhoRepository;
 import com.ajudaqui.meucomercio.repository.EstoqueRepository;
 import com.ajudaqui.meucomercio.repository.ProdutoRepository;
@@ -89,13 +86,20 @@ public class CarrinhoController {
 //
 //	}
 
-	@PutMapping(value = "/produtos/{id}")
-	public Carrinho atualizarProdutoCarrinho(@PathVariable("id") Long id,
+	@PutMapping(value = "/produto/{id}")
+	public CarrinhoDto atualizarProdutoCarrinho(@PathVariable("id") Long id,
 			@RequestBody CarrinhoAtualizarProdutos carrinhoAtualizarProdutos) {
-		Carrinho carrinho= carrinhoRepository.findById(id).orElseThrow();
-		carrinho.setEstoque(carrinhoAtualizarProdutos.listaAtualizada(produtoRepository, estoqueRepository));
-		carrinhoRepository.save(carrinho);
-		return carrinho;
+
+		Optional<Carrinho> carrinho = carrinhoRepository.findById(id);
+		if (carrinho.isPresent()) {
+
+			carrinho.get().setEstoque(carrinhoAtualizarProdutos.listaAtualizada(produtoRepository, estoqueRepository));
+			carrinhoRepository.save(carrinho.get());
+
+			return new CarrinhoDto(carrinho.get());
+		} else {
+			return null;
+		}
 	}
 
 	@DeleteMapping(value = "/{id}")
