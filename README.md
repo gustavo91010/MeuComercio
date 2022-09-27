@@ -1,2 +1,2 @@
 # MeuComercio
-Um projeto para estudos que simula um sistema de e-commerce e pratucar os estudos com java.
+Um projeto para estudos que simula um sistema de e-commerce e praticar os estudos com java.
